@@ -24,11 +24,11 @@ int main()
 Calls the 'loadMaze' function, passing the 'filename' through. When done, this should return with a 2D array that tsores the layout of the specified maze
 - now that maze is loaded into a 2D character array and validated, we can begin to use the maze
 While loop with the condition that the maze has not been completed yet (player has not reached the 'E' character)
-Calls the 'displayMaze; function to display the current state of the maze before the player decides where to move
+Calls the 'displayMaze; function to display the current state of the maze before the player decides where to move if the player wishes to view the map by pressing 'm'
 Calls the 'playerMove' function to move the player. Passed through the current player variable, which is the Character type structure variable
 - Returns from subroutine with an updated character position (most the time).
 If the player has successfully reached the end of the maze in the last movement then the conditional while loop this function is called inside shall be broken as the player has finished
-*/
+This should then finish executing the program*/
 }
 
 void loadMaze ()
@@ -75,6 +75,7 @@ void playerMove (Character player, Maze maza)
 void displayMaze (Maze maze)
 {
 /*Prints the 2D array of characters on the screen in the correct maze format so the player can see a
-visual representation of not only the maze, but where there character currently is respective to the maze layout*/
+visual representation of not only the maze, but where there character currently is respective to the maze layout
+- Reminder: This should only display upon the players input of 'm'*/
 }
 

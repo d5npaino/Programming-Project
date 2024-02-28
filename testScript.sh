@@ -161,6 +161,60 @@ else
     echo "FAIL"
 fi
 
+echo -n "Testing showing map - "
+echo "m" | timeout 0.2s ./maze mazes/correctTestMaze.csv > tmp
+if grep -q "Here's the current maze:" tmp;
+then
+    echo "PASS"
+else
+    echo "FAIL"
+fi
+
+echo -n "Testing (capitalized) upward movement - "
+echo "W" | timeout 0.2s ./maze mazes/correctTestMaze.csv > tmp
+if grep -q "Moved Upward:" tmp;
+then
+    echo "PASS"
+else
+    echo "FAIL"
+fi
+
+echo -n "Testing (capitalized) downward movement - "
+echo "S" | timeout 0.2s ./maze mazes/correctTestMaze.csv > tmp
+if grep -q "Moved Downward:" tmp;
+then
+    echo "PASS"
+else
+    echo "FAIL"
+fi
+
+echo -n "Testing (capitalized) moving left - "
+echo "A" | timeout 0.2s ./maze mazes/correctTestMaze.csv > tmp
+if grep -q "Moved Left:" tmp;
+then
+    echo "PASS"
+else
+    echo "FAIL"
+fi
+
+echo -n "Testing (capitalized) moving right - "
+echo "D" | timeout 0.2s ./maze mazes/correctTestMaze.csv > tmp
+if grep -q "Moved Right:" tmp;
+then
+    echo "PASS"
+else
+    echo "FAIL"
+fi
+
+echo -n "Testing (capitalized) showing map - "
+echo "M" | timeout 0.2s ./maze mazes/correctTestMaze.csv > tmp
+if grep -q "Here's the current maze:" tmp;
+then
+    echo "PASS"
+else
+    echo "FAIL"
+fi
+
 echo -n "Testing maze collision with # - "
 timeout 0.2s ./maze mazes/correctTestMaze.csv < inputs/mazeCollision.in > tmp
 if grep -q "Cannot move onto a '#' space!" tmp;
