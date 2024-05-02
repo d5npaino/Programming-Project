@@ -28,7 +28,7 @@ typedef struct __Coord
 
 typedef struct __Maze
 {
-    char *map[MAX_DIM * 2];
+    char map[MAX_DIM][MAX_DIM];
     int height;
     int width;
     coord start;
@@ -53,7 +53,6 @@ FILE *openFile(char *filename, char *mode)
  */
 void freeMaze(maze *this)
 {
-
     free(this);
 }
 
@@ -70,7 +69,7 @@ int createMaze(maze *this, int height, int width)
     freeMaze(this);
     for (int i = 0; i < height; i++)
     {
-        this->map[i] = malloc(width * sizeof(char));
+        //  this->map[i] = malloc(width * sizeof(char));
     }
 }
 /**
@@ -89,21 +88,21 @@ int loadMaze(maze *this, FILE *file)
     int endFound = 0;
     int lastLine = 0;
 
-   // int lineCounter = 0;
-  //  int lineLength = 0;
-  //  while (fgets(line, MAX_DIM, file) != NULL)
-  // {
-   //     lineCounter++;
-   //     lineLength = strlen(line);
-   // }
-  //  createMaze(this, lineCounter, lineLength + 1);
-  // my last attempts to try solve the problem
+    // int lineCounter = 0;
+    //  int lineLength = 0;
+    //  while (fgets(line, MAX_DIM, file) != NULL)
+    // {
+    //     lineCounter++;
+    //     lineLength = strlen(line);
+    // }
+    //  createMaze(this, lineCounter, lineLength + 1);
+    // my last attempts to try solve the problem
 
     if (file != NULL)
     {
         while (fgets(line, MAX_DIM, file) != NULL)
         {
-// valid maze checking
+            // valid maze checking
             if (strlen(line) < 5 || strchr(line, '\n') == NULL)
             {
                 if (lastLine == 0 && strlen(line) == (int)tempWidth)
@@ -149,7 +148,11 @@ int loadMaze(maze *this, FILE *file)
                     return 3;
                 }
             }
-            this->map[counter] = line;
+            for (int i = 0; i < strlen(line); i++)
+            {
+                this->map[counter][i] = line[i];
+            }
+            //  this->map[counter] = line;
             printf("%s", this->map[counter]);
             counter++;
         }
@@ -193,7 +196,6 @@ void printMaze(maze *this, coord *player)
             else
             {
                 printf("%c", this->map[i][j]);
-                printf("%s", this->map[i]);
             }
         }
         // end each row with a newline.
@@ -212,7 +214,7 @@ void move(maze *this, coord *player, char direction)
 {
     switch (direction)
     {
-        //case boundary checking for each movement option
+        // case boundary checking for each movement option
     case 'w':
         if (player->y - 1 > -1 && this->map[player->y - 1][player->x] != '#')
         {
@@ -271,13 +273,12 @@ int main(int argNum, char *args[])
         return 1;
     }
 
-   
     coord *player = malloc(sizeof(coord));
     maze *thisMaze = malloc(sizeof(maze));
     FILE *file = openFile(args[1], "r");
     char input[100];
 
-  //  freeMaze(thisMaze); -> this caused core dumping for some reason
+    //  freeMaze(thisMaze); -> this caused core dumping for some reason
     loadMaze(thisMaze, file);
     player->x = thisMaze->start.x;
     player->y = thisMaze->start.y;
@@ -288,6 +289,6 @@ int main(int argNum, char *args[])
         move(thisMaze, player, input[0]);
     }
     printf("You completed the maze!!");
-// if player wins, they break out the while loop and 0 is returned
+    // if player wins, they break out the while loop and 0 is returned
     return 0;
 }
