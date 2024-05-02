@@ -53,9 +53,26 @@ FILE *openFile(char *filename, char *mode)
  */
 void freeMaze(maze *this)
 {
+
     free(this);
 }
 
+/**
+ * @brief Initialise a maze object - allocate memory and set attributes
+ *
+ * @param this pointer to the maze to be initialised
+ * @param height height to allocate
+ * @param width width to allocate
+ * @return int 0 on success, 1 on fail
+ */
+int createMaze(maze *this, int height, int width)
+{
+    freeMaze(this);
+    for (int i = 0; i < height; i++)
+    {
+        this->map[i] = malloc(width * sizeof(char));
+    }
+}
 /**
  * @brief read in a maze file into a struct
  *
@@ -72,11 +89,21 @@ int loadMaze(maze *this, FILE *file)
     int endFound = 0;
     int lastLine = 0;
 
+   // int lineCounter = 0;
+  //  int lineLength = 0;
+  //  while (fgets(line, MAX_DIM, file) != NULL)
+  // {
+   //     lineCounter++;
+   //     lineLength = strlen(line);
+   // }
+  //  createMaze(this, lineCounter, lineLength + 1);
+  // my last attempts to try solve the problem
+
     if (file != NULL)
     {
         while (fgets(line, MAX_DIM, file) != NULL)
         {
-            this->map[counter] = malloc(MAX_DIM * sizeof(char));
+// valid maze checking
             if (strlen(line) < 5 || strchr(line, '\n') == NULL)
             {
                 if (lastLine == 0 && strlen(line) == (int)tempWidth)
@@ -89,6 +116,7 @@ int loadMaze(maze *this, FILE *file)
                     return 3;
                 }
             }
+            // checking width is consistent
             else if (counter == 0)
             {
                 tempWidth = strlen(line) - 1;
@@ -114,6 +142,7 @@ int loadMaze(maze *this, FILE *file)
                     this->end.x = i;
                     this->end.y = counter;
                 }
+                // catching invalid characters
                 else if (line[i] != ' ' && line[i] != '#' && line[i] != '\n')
                 {
                     printf("Error: invalid maze format\n");
@@ -124,6 +153,7 @@ int loadMaze(maze *this, FILE *file)
             printf("%s", this->map[counter]);
             counter++;
         }
+        // no mroe than one start and end point
         if (endFound != 1 || startFound != 1)
         {
             printf("Error: invalid maze format\n");
@@ -182,6 +212,7 @@ void move(maze *this, coord *player, char direction)
 {
     switch (direction)
     {
+        //case boundary checking for each movement option
     case 'w':
         if (player->y - 1 > -1 && this->map[player->y - 1][player->x] != '#')
         {
@@ -240,12 +271,13 @@ int main(int argNum, char *args[])
         return 1;
     }
 
-    // set up some useful variables (you can rename or remove these if you want)
+   
     coord *player = malloc(sizeof(coord));
     maze *thisMaze = malloc(sizeof(maze));
-    freeMaze(thisMaze);
     FILE *file = openFile(args[1], "r");
     char input[100];
+
+  //  freeMaze(thisMaze); -> this caused core dumping for some reason
     loadMaze(thisMaze, file);
     player->x = thisMaze->start.x;
     player->y = thisMaze->start.y;
@@ -255,14 +287,7 @@ int main(int argNum, char *args[])
         fgets(input, sizeof(input), stdin);
         move(thisMaze, player, input[0]);
     }
-
-    // open and validate mazefile
-
-    // read in mazefile to struct
-
-    // maze game loop
-
-    // win
-
-    // return, free, exit
+    printf("You completed the maze!!");
+// if player wins, they break out the while loop and 0 is returned
+    return 0;
 }
